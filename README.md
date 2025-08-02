@@ -87,6 +87,4 @@ IoT Dashboards
 
 WebSocket technology can be used not only for chatting but also for real-time data feeds from sensors or IoT devices.
 
-Conclusion Building a real-time chat application using WebSockets and React.js is a powerful way to understand the core principles of real-time communication, client-server interaction, and front-end development. The project was completed using a lightweight WebSocket server and a modern front-end framework, demonstrating how efficient, scalable, and interactive web applications can be created with relatively simple tools. This type of application can serve as a base for more complex systems involving authentication, chat history storage, private rooms, and multimedia integration.
-
-# -REAL-TIME-CHAT-APPLICATIONSS
+Conclusion Building a real-time chat application using WebSockets and React.js is a powerful way to understand the core principles of real-time communication, client-server interaction, and front-end development. The project was completed using a lightweight WebSocket server and a modern front-end framework, demonstrating how efficient, scalable, and interactive web applications can be created with relatively simple tools. This type of application can serve as a base for more complex systems involving authentication, chat history storage, private rooms, and multimedia integration
