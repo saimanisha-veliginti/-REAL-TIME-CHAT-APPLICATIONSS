@@ -1,0 +1,79 @@
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 3001 });
+
+const clients = new Set();
+
+server.on('connection', (socket) => {
+  clients.add(socket);
+  console.log('Client connected');
+
+  socket.on('message', (message) => {
+    for (const client of clients) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    }
+  });
+
+  socket.on('close', () => {
+    clients.delete(socket);
+    console.log('Client disconnected');
+  });
+});
+import React, { useEffect, useRef, useState } from 'react';
+
+function App() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const socket = useRef(null);
+
+  useEffect(() => {
+    socket.current = new WebSocket('ws://localhost:3001');
+
+    socket.current.onmessage = (event) => {
+      setMessages((prev) => [...prev, event.data]);
+    };
+
+    return () => {
+      socket.current.close();
+    };
+  }, []);
+
+  const sendMessage = () => {
+    if (input.trim() !== '') {
+      socket.current.send(input);
+      setMessages((prev) => [...prev, `You: ${input}`]);
+      setInput('');
+    }
+  };
+
+  return (
+    <div style={styles.container}>
+      <h2>React Chat App</h2>
+      <div style={styles.chatBox}>
+        {messages.map((msg, i) => (
+          <div key={i} style={styles.message}>{msg}</div>
+        ))}
+      </div>
+      <input
+        style={styles.input}
+        type="text"
+        value={input}
+        placeholder="Type a message..."
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+      />
+      <button onClick={sendMessage} style={styles.button}>Send</button>
+    </div>
+  );
+}
+
+const styles = {
+  container: { maxWidth: 500, margin: '40px auto', textAlign: 'center' },
+  chatBox: { border: '1px solid #ccc', padding: 10, height: 300, overflowY: 'auto', marginBottom: 10 },
+  input: { width: '70%', padding: 8, fontSize: 16 },
+  button: { padding: '8px 16px', marginLeft: 10 },
+  message: { textAlign: 'left', marginBottom: 5 }
+};
+
+export default App;
